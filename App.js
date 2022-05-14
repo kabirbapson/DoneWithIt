@@ -1,17 +1,16 @@
 import React from 'react';
-import { StyleSheet } from 'react-native'
-import ListingDetailsScreen from './app/screens/ListingDetailsScreen';
-import MessagesScreen from './app/screens/MessagesScreen';
-import ViewImage from './app/screens/ViewImage';
-
-function App(props) {
+import { View, SafeAreaView, TextInput, Text, Switch } from 'react-native'
+import AppPicker from './app/components/AppPicker.js';
+import AppTextInput from './app/components/AppTextInput.js';
+import AppPicker from './app/components/AppPicker.js';
+import AppText from './app/components/AppText.js';
+export default function App() {
     return (
-        // <ListingDetailsScreen />
-        // <ViewImage />
-        <MessagesScreen />
+        <Screen>
+
+            <AppPicker />
+            <AppTextInput />
+        </Screen>
     );
 }
-const styles = StyleSheet.create({
 
-})
-export default App;
