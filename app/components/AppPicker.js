@@ -1,18 +1,48 @@
-import { StyleSheet, Text, View, TextInput, Platform } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import { StyleSheet, Text, Button, Modal, View, FlatList, TextInput, Platform, TouchableWithoutFeedback } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import defaultStyles from '../config/text'
 import AppText from './AppText'
-
-function AppPicker
-    ({ icon, placeholder, ...otherProps }) {
+import Screen from './Screen'
+import PickerItem from './PickerItem'
+function AppPicker({ icon, onSelectItem, SelectedItem, placeholder, items }) {
+    const [modalVisible, setmodalVisible] = useState(false)
     return (
-        <View style={styles.container}>
-            {icon && <MaterialCommunityIcons name={icon} size={20} color={defaultStyles.colors.medium} style={styles.icon} />}
-            <AppText>
-                {placeholder}
-            </AppText>
-        </View>
+        <>
+            <TouchableWithoutFeedback onPress={() => setmodalVisible(true)}>
+                <View style={styles.container}>
+                    {icon &&
+                        <MaterialCommunityIcons name={icon}
+                            size={20} color={defaultStyles.colors.medium}
+                            style={styles.icon} />}
+                    <AppText style={styles.text}> {SelectedItem ? SelectedItem.label : placeholder} </AppText>
+                    <MaterialCommunityIcons
+                        name='chevron-down'
+                        size={20}
+                        color={defaultStyles.colors.medium}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
+            <Modal visible={modalVisible} animationType='slide' >
+                <Screen>
+                    <Button title='close' onPress={() => setmodalVisible(false)} />
+                    <FlatList
+                        data={items}
+                        keyExtractor={item => item.value.toString()}
+                        renderItem={({ item }) => (
+                            <PickerItem
+                                label={item.label}
+                                onPress={() => {
+                                    setmodalVisible(false);
+                                    onSelectItem(item)
+                                }}
+                            />
+                        )
+                        }
+                    />
+                </Screen>
+            </Modal>
+        </>
     )
 }
 
@@ -27,6 +57,9 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginRight: 10
+    },
+    text: {
+        flex: 1
     }
 })
 export default AppPicker
