@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
-import CategoryPickerItem from "../components/CategoryPickerItem";
 
 import {
   AppForm,
@@ -9,27 +8,30 @@ import {
   AppFormPicker as Picker,
   SubmitButton,
 } from "../components/forms";
-import Wrapper from "../components/Wrapper";
+import Screen from "../components/Screen";
+import useLocation from "../hooks/useLocation";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
   category: Yup.object().required().nullable().label("Category"),
   description: Yup.string().label("Description"),
   price: Yup.number().required().min(1).max(10000).label("Price"),
+  images: Yup.array().min(1, "Please select at least 1 Image"),
 });
 
 const categories = [
-  { label: "Furniture", value: 1, backgroundColor: "red", icon: "apps" },
-  { label: "Camera", value: 2, backgroundColor: "green", icon: "email" },
-  { label: "Clothing", value: 3, backgroundColor: "blue", icon: "lock" },
+  { label: "Furniture", value: 1 },
+  { label: "Camera", value: 2 },
+  { label: "Clothing", value: 3 },
 ];
 
-const ListingEditScreen = () => {
+function ListingEditScreen() {
+  const location = useLocation();
   const handleSubmit = (values) => {
-    console.log({ values });
+    console.log(location);
   };
   return (
-    <Wrapper style={styles.container}>
+    <Screen style={styles.container}>
       <AppForm
         initialValues={{
           title: "",
@@ -52,16 +54,8 @@ const ListingEditScreen = () => {
           name="price"
           keyboardType="numeric"
           maxLength={8}
-          width={120}
         />
-        <Picker
-          data={categories}
-          name="category"
-          numberOfColumns={3}
-          PickerItemComponent={CategoryPickerItem}
-          placeholder="Category"
-          width="50%"
-        />
+        <Picker data={categories} name="category" placeholder="Category" />
         <FormField
           autoCapitalize="sentences"
           autoCorrect
@@ -72,9 +66,9 @@ const ListingEditScreen = () => {
         />
         <SubmitButton title="Post" />
       </AppForm>
-    </Wrapper>
+    </Screen>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
